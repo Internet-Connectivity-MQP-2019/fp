@@ -68,8 +68,12 @@ const displayBar = function (raw_data) {
         data.push({key: key, value: value.avg, max: value.max});
     }
 
-    y.domain(data.sort(function (a, b) {
-        return b.value - a.value;
+    y.domain(data.sort(function(a, b) {
+        if(isFinite(b.value-a.value)) {
+            return b.value-a.value;
+        } else {
+            return isFinite(a.value) ? -1 : 1;
+        }
     }).map(function (d) {
         return d.key;
     }));

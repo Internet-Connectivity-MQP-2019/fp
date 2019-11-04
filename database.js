@@ -52,7 +52,7 @@ module.exports = function () {
 
     function maxMindLookup(ip) {
         return new Promise((resolve, reject) => {
-            MaxMind.open('GeoLite2-City.mmdb').then(reader => {
+            MaxMind.open('GeoIP2-City.mmdb').then(reader => {
                 let data = reader.city(ip);
                 if (!ip) reject("MaxMind lookup failed! No IP for data[0]");
                 resolve({
