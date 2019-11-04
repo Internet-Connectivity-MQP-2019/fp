@@ -6,7 +6,8 @@ import socket from "./index";
 
 let stopped = true;
 
-const rollingNumber = 10;
+const rollingNumber = 20;
+const backToBackCount = 2;
 
 const userLocation = {latitude: undefined, longitude: undefined};
 
@@ -54,17 +55,20 @@ const runCycle = async function () {
 		if (stopped) break;
 
 		const domain = domains[i];
-		await ping(domain.domain)
+
+		for (let c = 0; c < backToBackCount; c += 1) {
+			await ping(domain.domain)
 				.then(pingTime => {
 					localData[`${domain.name} (${domain.rank})`].push(pingTime);
 
-					while( localData[`${domain.name} (${domain.rank})`].length > rollingNumber ) {
+					while (localData[`${domain.name} (${domain.rank})`].length > rollingNumber) {
 						localData[`${domain.name} (${domain.rank})`].shift();
 					}
 
-					newData.push({favicon: domain.name, rtt: pingTime});
+					newData.push({favicon: domain.name, rtt: pingTime, backToBackId: c});
 				})
 				.catch(console.log);
+		}
 	}
 
 	newData.forEach(d => {
