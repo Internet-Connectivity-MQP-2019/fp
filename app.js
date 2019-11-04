@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const fs = require('fs');
+const unzip = require("unzip");
+
+fs.createReadStream('GeoIP2-City.zip').pipe(unzip.Extract({ path: '.' }));
 
 const app = express();
 
